@@ -1,21 +1,15 @@
-from rest_framework.views import APIView
+from rest_framework import viewsets
 from rest_framework.response import Response
-# from rest_framework import authentication, permissions
-# from django.contrib.auth.models import User
+from rest_framework import status
+
+from . import models
 
 
-class Home(APIView):
-    """
-    Home test view.
+class ElectrocardiogramViewSet(viewsets.ViewSet):
 
-    * Requires token authentication.
-    * Only authenticated users are able to access this view.
-    """
-    # authentication_classes = (authentication.TokenAuthentication,)
-    # permission_classes = (permissions.IsAdminUser,)
+    # def retrieve(self, request):
+    #     return Response('status=status.HTTP_201_CREATED')
 
-    def get(self, request, format=None):
-        """
-        Return a 'Hello, World!'.
-        """
-        return Response('Hello, World!!!')
+    def create(self, request):
+        print(request.data)
+        return Response(status=status.HTTP_201_CREATED)

@@ -17,7 +17,12 @@ from django.conf.urls import url
 from django.conf.urls import include
 from django.contrib import admin
 
+from rest_framework.authtoken import views
+
+
 urlpatterns = [
     url(r'^', include('ecg_handler.urls', namespace='ecg-handler')),
     url(r'^admin/', admin.site.urls),
+    url(r'^login/$', views.obtain_auth_token, name='login')
+    # url(r'^api-auth/', include('rest_framework.urls')),
 ]
