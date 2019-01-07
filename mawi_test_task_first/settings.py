@@ -142,4 +142,7 @@ REST_FRAMEWORK = {
     ),
 }
 
+
+# Connect to MongoDB
+
 connect('mawi_test_task_first')
