@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # third-party
     'rest_framework',
     'rest_framework.authtoken',
+    'channels',
     # local
     'ecg_handler',
 ]
@@ -157,3 +158,8 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULE = {}
+
+
+# Channels
+
+ASGI_APPLICATION = "mawi_test_task_first.routing.application"

@@ -7,3 +7,4 @@ pymongo==2.8
 redis==2.10.6
 celery==4.0.2
 kombu==4.0.2
+channels==2.1.6
