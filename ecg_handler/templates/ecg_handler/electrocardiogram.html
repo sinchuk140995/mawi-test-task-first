@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Electrocardiogram status</title>
+</head>
+<body>
+    <form>
+        <input id="electrocardiogram-id-input" type="text" size="50" placeholder="Electrocardiogram id" required />
+        <input id="electrocardiogram-id-submit" type="button" value="Send"/>
+    </form>
+    <div>
+        <p id="math-expecation"></p>
+        <p id="dispersion"></p>
+        <p id="electrocardiogram-processing-error"></p>
+    </div>
+</body>
+<script>
+    var isSocketOpend = false;
+
+    var service = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/electrocardiogram/status/');
+
+    service.onmessage = function(event) {
+        console.log('onmessage event: ' + event.data);
+        electrocardiogramStatistic = JSON.parse(event.data);
+        if (electrocardiogramStatistic.hasOwnProperty('error_message')) {
+            document.getElementById('electrocardiogram-processing-error').innerHTML = electrocardiogramStatistic['error_message'];
+        } else {
+            document.getElementById('math-expecation').innerHTML = 'Mathematical expecatation: ' + electrocardiogramStatistic['math_expecation'];
+            document.getElementById('dispersion').innerHTML = 'Dispersion: ' + electrocardiogramStatistic['dispersion'];
+        }
+    }
+
+    service.onopen = function() {
+        isSocketOpend = true;
+        // service.send("test");
+    }
+
+    service.onclose = function() {
+        console.log('Chat socket closed unexpectedly');
+    }
+
+    service.onerror = function(event) {
+        console.log('Error happended' + event.data);
+    }
+
+    document.querySelector('#electrocardiogram-id-submit').onclick = function(e) {
+        if (!isSocketOpend) {
+            console.log('Socket is not open');
+            return;
+        }
+
+        document.getElementById('math-expecation').innerHTML = '';
+        document.getElementById('dispersion').innerHTML = '';
+        document.getElementById('electrocardiogram-processing-error').innerHTML = '';
+
+        var electrocardiogramIdInput = document.querySelector('#electrocardiogram-id-input');
+        var electrocardiogramId = electrocardiogramIdInput.value;
+        service.send(JSON.stringify({
+            'electrocardiogramId': electrocardiogramId
+        }));
+
+        // electrocardiogramIdInput.value = '';
+    };
+
+    document.querySelector('#electrocardiogram-id-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#electrocardiogram-id-submit').click();
+        }
+    };
+</script>
+</html>

@@ -2,6 +2,8 @@ import json
 
 from channels.generic.websocket import WebsocketConsumer
 
+from . import tasks
+
 
 class ElectrocardiogramConsumer(WebsocketConsumer):
 
@@ -12,9 +14,10 @@ class ElectrocardiogramConsumer(WebsocketConsumer):
         pass
 
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-
-        self.send(text_data=json.dumps({
-            'message': message
-        }))
+        electrocardiogram_id_json = json.loads(text_data)
+        electrocardiogram_id = electrocardiogram_id_json.get('electrocardiogramId')
+        expectation_and_dispersion_task = tasks.math_expectation_and_dispersion \
+            .apply_async((electrocardiogram_id,), countdown=4)
+        expectation_and_dispersion_results = expectation_and_dispersion_task.get()
+        result_json = json.dumps(expectation_and_dispersion_results)
+        self.send(text_data=result_json)

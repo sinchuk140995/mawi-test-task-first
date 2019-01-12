@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
+
 from celery import task
+from mongoengine.errors import ValidationError
 
 from . import models
 
@@ -9,7 +11,7 @@ def math_expectation_and_dispersion(electrocardiogram_id):
     try:
         ecg = models.Electrocardiogram.objects.get(pk=electrocardiogram_id)
     except ValidationError:
-        return {'message': 'No such electrocardiogram.'}
+        return {'error_message': 'No such electrocardiogram.'}
 
     stop_index = signals_count = len(ecg.signals)
     step = 500 if signals_count > 500 else signals_count
