@@ -20,7 +20,7 @@
 
     var service = new WebSocket(
         'ws://' + window.location.host +
-        '/ws/electrocardiogram/status/', ["access_token", "ae7edc26b6da57682b5bdbb99423ac7140aa2e72"]);
+        '/ws/electrocardiogram/status/', ["access_token", "ae7edc26b6da57682b5bdbb99423ac7140aa2e72"]); // test access token, change it to your user token
 
     service.onmessage = function(event) {
         console.log('onmessage event: ' + event.data);
